@@ -37,7 +37,7 @@ namespace ProyectoFinal
             OpenChildForm(new FrmBusqueda(), sender);
 
         }
-
+        
         // Salir Button
         private void btnSalir_Click(object sender, EventArgs e)
         {
