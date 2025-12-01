@@ -16,6 +16,9 @@ namespace ProyectoFinal.Forms
             this.BackColor = DatosGlobales.ColorFondo;
         }
 
+        // Eventos de Botones
+
+        // Generar Números (del 0 al 500)
         private void BtnGenerar_Click(object sender, EventArgs e)
         {
             if (int.TryParse(txtCantidad.Text, out int n) && n > 0)
@@ -25,7 +28,6 @@ namespace ProyectoFinal.Forms
                 lstOriginal.Items.Clear();
                 lstInsertion.Items.Clear();
                 lstQuick.Items.Clear();
-
                 lstOriginal.BeginUpdate();
                 for (int i = 0; i < n; i++)
                 {
@@ -37,124 +39,93 @@ namespace ProyectoFinal.Forms
             }
         }
 
-        // INSERTION SORT
+        // Insertion Sort
         private void BtnInsertAsc_Click(object sender, EventArgs e) => EjecutarInsertion(true);
         private void BtnInsertDesc_Click(object sender, EventArgs e) => EjecutarInsertion(false);
 
+        // Métodos asíncronos para Insertion Sort
         private async void EjecutarInsertion(bool asc)
         {
             if (listaOriginal.Count == 0) return;
-            if (listaOriginal.Count > 10000 && MessageBox.Show("Esto tomará millones de pasos. ¿Seguro?", "Aviso", MessageBoxButtons.YesNo) == DialogResult.No) return;
+            if (listaOriginal.Count > 20000 && MessageBox.Show("Insertion Sort masivo detectado. ¿Seguir?", "Alerta", MessageBoxButtons.YesNo) == DialogResult.No) return;
 
             btnInsertAsc.Enabled = false; btnInsertDesc.Enabled = false;
-            lblResInsertion.Text = "Contando pasos...";
+            lblResInsertion.Text = "Procesando...";
 
             var resultado = await Task.Run(() =>
             {
-                long pasos = 0;
                 long m1 = GC.GetAllocatedBytesForCurrentThread();
                 Stopwatch sw = Stopwatch.StartNew();
-
                 List<int> copia = new List<int>(listaOriginal);
 
                 for (int i = 1; i < copia.Count; i++)
                 {
                     int key = copia[i];
                     int j = i - 1;
-
-                    // El while hace las comparaciones
-                    while (j >= 0)
+                    while (j >= 0 && (asc ? copia[j] > key : copia[j] < key))
                     {
-                        pasos++; // PASO DE COMPARACIÓN
-                        if (asc ? copia[j] > key : copia[j] < key)
-                        {
-                            copia[j + 1] = copia[j];
-                            j--;
-                        }
-                        else break;
+                        copia[j + 1] = copia[j];
+                        j--;
                     }
                     copia[j + 1] = key;
                 }
 
                 sw.Stop();
                 long m2 = GC.GetAllocatedBytesForCurrentThread();
-
-                return new { Lista = copia, Tiempo = sw.Elapsed.TotalSeconds, Memoria = m2 - m1, Pasos = pasos };
+                return new { Lista = copia, Tiempo = sw.Elapsed.TotalSeconds, Memoria = m2 - m1 };
             });
 
             ActualizarLista(lstInsertion, resultado.Lista);
-            lblResInsertion.Text = $"Pasos: {resultado.Pasos:N0}\nMemoria: {resultado.Memoria:N0} bytes";
-
-            DatosGlobales.Resultados.Add(new ResultadoAlgoritmo
-            {
-                Nombre = "Insertion Sort",
-                CantidadElementos = listaOriginal.Count,
-                TiempoSegundos = resultado.Tiempo,
-                Pasos = resultado.Pasos, // Guardamos Pasos
-                Tipo = "Ordenamiento"
-            });
-
+            lblResInsertion.Text = $"Tiempo: {resultado.Tiempo:F7} s\nMemoria: {resultado.Memoria:N0} bytes";
             btnInsertAsc.Enabled = true; btnInsertDesc.Enabled = true;
         }
 
-        // QUICK SORT
+        // Quick Sort
         private void BtnQuickAsc_Click(object sender, EventArgs e) => EjecutarQuick(true);
         private void BtnQuickDesc_Click(object sender, EventArgs e) => EjecutarQuick(false);
 
+        // Métodos asíncronos para Quick Sort
         private async void EjecutarQuick(bool asc)
         {
             if (listaOriginal.Count == 0) return;
 
             btnQuickAsc.Enabled = false; btnQuickDesc.Enabled = false;
-            lblResQuick.Text = "Contando pasos...";
+            lblResQuick.Text = "Procesando...";
 
             var resultado = await Task.Run(() =>
             {
-                long pasosTotales = 0;
                 long m1 = GC.GetAllocatedBytesForCurrentThread();
                 Stopwatch sw = Stopwatch.StartNew();
-
                 List<int> copia = new List<int>(listaOriginal);
-                QuickSortRec(copia, 0, copia.Count - 1, asc, ref pasosTotales);
+
+                QuickSortRec(copia, 0, copia.Count - 1, asc);
 
                 sw.Stop();
                 long m2 = GC.GetAllocatedBytesForCurrentThread();
-
-                return new { Lista = copia, Tiempo = sw.Elapsed.TotalSeconds, Memoria = m2 - m1, Pasos = pasosTotales };
+                return new { Lista = copia, Tiempo = sw.Elapsed.TotalSeconds, Memoria = m2 - m1 };
             });
 
             ActualizarLista(lstQuick, resultado.Lista);
-            lblResQuick.Text = $"Pasos: {resultado.Pasos:N0}\nMemoria: {resultado.Memoria:N0} bytes";
-
-            DatosGlobales.Resultados.Add(new ResultadoAlgoritmo
-            {
-                Nombre = "Quick Sort",
-                CantidadElementos = listaOriginal.Count,
-                TiempoSegundos = resultado.Tiempo,
-                Pasos = resultado.Pasos, // Guardamos Pasos
-                Tipo = "Ordenamiento"
-            });
-
+            lblResQuick.Text = $"Tiempo: {resultado.Tiempo:F7} s\nMemoria: {resultado.Memoria:N0} bytes";
             btnQuickAsc.Enabled = true; btnQuickDesc.Enabled = true;
         }
 
-        private void QuickSortRec(List<int> arr, int low, int high, bool asc, ref long pasos)
+        private void QuickSortRec(List<int> arr, int low, int high, bool asc)
         {
             if (low < high)
             {
-                int pi = Partition(arr, low, high, asc, ref pasos);
-                QuickSortRec(arr, low, pi - 1, asc, ref pasos);
-                QuickSortRec(arr, pi + 1, high, asc, ref pasos);
+                int pi = Partition(arr, low, high, asc);
+                QuickSortRec(arr, low, pi - 1, asc);
+                QuickSortRec(arr, pi + 1, high, asc);
             }
         }
 
-        private int Partition(List<int> arr, int low, int high, bool asc, ref long pasos)
+        private int Partition(List<int> arr, int low, int high, bool asc)
         {
             int pivot = arr[high];
             int i = (low - 1);
             for (int j = low; j < high; j++)
             {
-                pasos++; // PASO DE COMPARACIÓN
                 if (asc ? arr[j] < pivot : arr[j] > pivot)
                 {
                     i++;
@@ -165,21 +136,13 @@ namespace ProyectoFinal.Forms
             return i + 1;
         }
 
+        // Actualizar ListBox
         private void ActualizarLista(ListBox lst, List<int> datos)
         {
             lst.Items.Clear();
             lst.BeginUpdate();
             for (int i = 0; i < datos.Count && i < 2000; i++) lst.Items.Add(datos[i]);
             lst.EndUpdate();
-        }
-
-        private void txtCantidad_TextChanged(object sender, EventArgs e)
-        {
-            // Enable Generate only for valid positive integers
-            if (int.TryParse(txtCantidad.Text.Trim(), out int n) && n > 0)
-                btnGenerar.Enabled = true;
-            else
-                btnGenerar.Enabled = false;
         }
     }
 }

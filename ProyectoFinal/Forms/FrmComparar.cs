@@ -15,7 +15,6 @@ namespace ProyectoFinal.Forms
             InitializeComponent();
             this.BackColor = DatosGlobales.ColorFondo;
 
-            // Configurar Estilo de los 4 Gráficos Individuales
             ConfigurarPlot(plotLineal, "Búsqueda Lineal (O(n))");
             ConfigurarPlot(plotBinaria, "Búsqueda Binaria (O(log n))");
             ConfigurarPlot(plotInsertion, "Insertion Sort (O(n²))");
@@ -25,128 +24,85 @@ namespace ProyectoFinal.Forms
         private void ConfigurarPlot(ScottPlot.WinForms.FormsPlot plot, string titulo)
         {
             plot.Plot.Title(titulo);
-            plot.Plot.Axes.Bottom.Label.Text = "Cantidad (N)";
-            plot.Plot.Axes.Left.Label.Text = "Pasos (Operaciones)";
+            plot.Plot.Axes.Bottom.Label.Text = "N (Elementos)";
+            plot.Plot.Axes.Left.Label.Text = "Pasos";
             plot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#E0E0E0");
         }
 
-        // Botón Benchmark para mostrar gráficas de las curvas de complejidad (o notación Big O)
         private async void BtnBenchmark_Click(object sender, EventArgs e)
         {
             btnBenchmark.Enabled = false;
-            btnBenchmark.Text = "Ejecutando...";
-
-            // Limpiamos datos viejos
+            btnBenchmark.Text = "Procesando...";
             DatosGlobales.Resultados.Clear();
 
-            // Cantidades para generar una curva suave
+            // Generamos puntos para la curva (100 a 10,000)
             List<int> cantidades = new List<int>();
-            for (int i = 100; i <= 10000; i += 150)
-            {
-                cantidades.Add(i);
-            }
+            for (int i = 100; i <= 10000; i += 150) cantidades.Add(i);
 
             await Task.Run(() =>
             {
                 foreach (int n in cantidades)
                 {
-                    // Generar Lista Aleatoria
                     List<int> datos = GenerarLista(n);
 
-                    // --- BÚSQUEDA ---
-                    // Se busca -1 (porque no está) para forzar el peor caso y mostrar la gráfica tal cual en la notación Big O lo representa
-                    int objetivo = -1;
+                    // BUSQUEDA (Peor caso: Buscar -1)
+                    Guardar("Lineal", n, TestLineal(datos, -1), "Busqueda");
 
-                    // Lineal
-                    long pasosLineal = TestLineal(datos, objetivo);
-                    Guardar("Lineal", n, pasosLineal, "Busqueda");
-
-                    // Binaria
                     List<int> ordenada = new List<int>(datos);
                     ordenada.Sort();
-                    long pasosBinaria = TestBinaria(ordenada, objetivo);
-                    Guardar("Binaria", n, pasosBinaria, "Busqueda");
+                    Guardar("Binaria", n, TestBinaria(ordenada, -1), "Busqueda");
 
-                    // --- ORDENAMIENTO ---
-                    // Insertion (Limitado a 6000 para no congelar)
-                    if (n <= 6000)
-                    {
-                        // Se ordena una lista desordenada, el peor caso es una aleatoria pero se puede visualizar la curva así
-                        long pasosInsertion = TestInsertion(new List<int>(datos));
-                        Guardar("Insertion Sort", n, pasosInsertion, "Ordenamiento");
-                    }
+                    // ORDENAMIENTO
+                    if (n <= 6000) // Límite para Insertion
+                        Guardar("Insertion Sort", n, TestInsertion(new List<int>(datos)), "Ordenamiento");
 
-                    // QuickSort
-                    long pasosQuick = TestQuick(new List<int>(datos));
-                    Guardar("Quick Sort", n, pasosQuick, "Ordenamiento");
+                    Guardar("Quick Sort", n, TestQuick(new List<int>(datos)), "Ordenamiento");
                 }
             });
 
             ActualizarGrafica();
-            btnBenchmark.Text = "Test Finalizado";
+            btnBenchmark.Text = "Ejecutar Benchmark";
             btnBenchmark.Enabled = true;
         }
 
-        // --- ACTUALIZAR LAS 4 GRÁFICAS ---
-        public void ActualizarGrafica()
+        private void ActualizarGrafica()
         {
-            // Limpiar
-            plotLineal.Plot.Clear();
-            plotBinaria.Plot.Clear();
-            plotInsertion.Plot.Clear();
-            plotQuick.Plot.Clear();
-
             var datos = DatosGlobales.Resultados;
-            if (datos == null || datos.Count == 0) return;
 
-            // Dibujar cada algoritmo en SU propio gráfico
             DibujarCurva(plotLineal, datos, "Lineal", ScottPlot.Colors.Blue);
             DibujarCurva(plotBinaria, datos, "Binaria", ScottPlot.Colors.Green);
             DibujarCurva(plotInsertion, datos, "Insertion Sort", ScottPlot.Colors.Red);
             DibujarCurva(plotQuick, datos, "Quick Sort", ScottPlot.Colors.Orange);
 
-            // Refrescar todos los gráficos para mostrar cambios
             plotLineal.Refresh();
             plotBinaria.Refresh();
             plotInsertion.Refresh();
             plotQuick.Refresh();
         }
 
-        private void DibujarCurva(ScottPlot.WinForms.FormsPlot plot, List<ResultadoAlgoritmo> totalDatos, string nombre, ScottPlot.Color color)
+        private void DibujarCurva(ScottPlot.WinForms.FormsPlot plot, List<ResultadoAlgoritmo> datos, string nombre, ScottPlot.Color color)
         {
-            var puntos = totalDatos
-                .Where(x => x.Nombre == nombre)
-                .OrderBy(x => x.CantidadElementos)
-                .ToList();
-
+            plot.Plot.Clear();
+            var puntos = datos.Where(x => x.Nombre == nombre).OrderBy(x => x.CantidadElementos).ToList();
             if (puntos.Count == 0) return;
 
             double[] xs = puntos.Select(p => (double)p.CantidadElementos).ToArray();
-            double[] ys = puntos.Select(p => (double)p.Pasos).ToArray(); // <--- Eje Y: PASOS
+            double[] ys = puntos.Select(p => (double)p.Pasos).ToArray();
 
-            // Usamos Scatter para dibujar línea + puntos
             var linea = plot.Plot.Add.Scatter(xs, ys);
             linea.Color = color;
             linea.LineWidth = 3;
-            linea.MarkerSize = 5; // Puntos pequeños para que la curva se vea suave
+            linea.MarkerSize = 0; // Sin puntos, solo línea limpia
 
-            plot.Plot.Axes.AutoScale(); // Zoom automático
+            plot.Plot.Axes.AutoScale();
         }
 
         private void Guardar(string nombre, int n, long pasos, string tipo)
         {
-            DatosGlobales.Resultados.Add(new ResultadoAlgoritmo
-            {
-                Nombre = nombre,
-                CantidadElementos = n,
-                Pasos = pasos,
-                Tipo = tipo,
-                TiempoSegundos = 0 // No se usa tiempo aquí
-            });
+            DatosGlobales.Resultados.Add(new ResultadoAlgoritmo { Nombre = nombre, CantidadElementos = n, Pasos = pasos, Tipo = tipo });
         }
 
-        // --- ALGORITMOS "SILENCIOSOS" PARA EL TEST --- (más condensados pero igual de funcionales para visualizar la gráfica)
-
+        // --- ALGORITMOS INTERNOS (BENCHMARK) ---
         private List<int> GenerarLista(int n)
         {
             Random rnd = new Random();
@@ -155,78 +111,66 @@ namespace ProyectoFinal.Forms
             return l;
         }
 
-        private long TestLineal(List<int> lista, int objetivo)
+        private long TestLineal(List<int> l, int obj)
         {
-            long pasos = 0;
-            foreach (var num in lista)
-            {
-                pasos++;
-                if (num == objetivo) break;
-            }
-            return pasos;
+            long p = 0;
+            foreach (var n in l) { p++; if (n == obj) break; }
+            return p;
         }
 
-        private long TestBinaria(List<int> ordenada, int objetivo)
+        private long TestBinaria(List<int> l, int obj)
         {
-            long pasos = 0;
-            int izq = 0, der = ordenada.Count - 1;
-            while (izq <= der)
+            long p = 0;
+            int i = 0, d = l.Count - 1;
+            while (i <= d)
             {
-                pasos++;
-                int medio = izq + (der - izq) / 2;
-                if (ordenada[medio] == objetivo) break;
-                if (ordenada[medio] < objetivo) izq = medio + 1;
-                else der = medio - 1;
+                p++;
+                int m = i + (d - i) / 2;
+                if (l[m] == obj) break;
+                if (l[m] < obj) i = m + 1; else d = m - 1;
             }
-            return pasos;
+            return p;
         }
 
-        private long TestInsertion(List<int> lista)
+        private long TestInsertion(List<int> l)
         {
-            long pasos = 0;
-            for (int i = 1; i < lista.Count; i++)
+            long p = 0;
+            for (int i = 1; i < l.Count; i++)
             {
-                int key = lista[i];
-                int j = i - 1;
+                int k = l[i], j = i - 1;
                 while (j >= 0)
                 {
-                    pasos++;
-                    if (lista[j] > key)
-                    {
-                        lista[j + 1] = lista[j];
-                        j--;
-                    }
-                    else break;
+                    p++;
+                    if (l[j] > k) { l[j + 1] = l[j]; j--; } else break;
                 }
-                lista[j + 1] = key;
+                l[j + 1] = k;
             }
-            return pasos;
+            return p;
         }
 
-        private long TestQuick(List<int> lista)
+        private long TestQuick(List<int> l)
         {
-            long pasos = 0;
-            QuickSortRec(lista, 0, lista.Count - 1, ref pasos);
-            return pasos;
+            long p = 0;
+            QuickRec(l, 0, l.Count - 1, ref p);
+            return p;
         }
 
-        private void QuickSortRec(List<int> arr, int low, int high, ref long pasos)
+        private void QuickRec(List<int> arr, int low, int high, ref long p)
         {
             if (low < high)
             {
-                int pi = Partition(arr, low, high, ref pasos);
-                QuickSortRec(arr, low, pi - 1, ref pasos);
-                QuickSortRec(arr, pi + 1, high, ref pasos);
+                int pi = Partition(arr, low, high, ref p);
+                QuickRec(arr, low, pi - 1, ref p);
+                QuickRec(arr, pi + 1, high, ref p);
             }
         }
 
-        private int Partition(List<int> arr, int low, int high, ref long pasos)
+        private int Partition(List<int> arr, int low, int high, ref long p)
         {
-            int pivot = arr[high];
-            int i = (low - 1);
+            int pivot = arr[high], i = low - 1;
             for (int j = low; j < high; j++)
             {
-                pasos++;
+                p++;
                 if (arr[j] < pivot)
                 {
                     i++;

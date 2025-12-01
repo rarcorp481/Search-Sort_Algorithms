@@ -1,5 +1,4 @@
-﻿
-namespace ProyectoFinal.Forms
+﻿namespace ProyectoFinal.Forms
 {
     partial class FrmOrdenamiento
     {
@@ -224,6 +223,10 @@ namespace ProyectoFinal.Forms
             ResumeLayout(false);
         }
 
-
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+            // Enable Generate button only when user entered a positive integer
+            btnGenerar.Enabled = int.TryParse(txtCantidad.Text, out int n) && n > 0;
+        }
     }
 }

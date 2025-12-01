@@ -1,5 +1,4 @@
-﻿
-namespace ProyectoFinal.Forms
+﻿namespace ProyectoFinal.Forms
 {
     partial class FrmBusqueda
     {
@@ -219,7 +218,14 @@ namespace ProyectoFinal.Forms
             ResumeLayout(false);
         }
 
-
+        private void FrmBusqueda_Load(object sender, EventArgs e)
+        {
+            // Initialize control state if needed. Example:
+            txtCantidad.Text = "100";
+            lblResLineal.Text = "Resultados:\nEsperando...";
+            lblResBinaria.Text = "Resultados:\nEsperando...";
+            // No exception thrown here.
+        }
 
         private Label lblBuscarBinaria;
         private TextBox txtBuscarBinaria;

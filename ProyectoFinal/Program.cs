@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace ProyectoFinal
 {
+    // Datos necesarios para la gráfica comparativa
     public class ResultadoAlgoritmo
     {
         public string Nombre { get; set; }
         public int CantidadElementos { get; set; }
-        public double TiempoSegundos { get; set; }
         public long Pasos { get; set; } 
         public string Tipo { get; set; }
     }

@@ -5,18 +5,13 @@
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Panel pnlGrafica;
         private System.Windows.Forms.TableLayoutPanel tblLayout;
-
-        // Gráficos
         private ScottPlot.WinForms.FormsPlot plotLineal;
         private ScottPlot.WinForms.FormsPlot plotBinaria;
         private ScottPlot.WinForms.FormsPlot plotInsertion;
         private ScottPlot.WinForms.FormsPlot plotQuick;
-
         private System.Windows.Forms.GroupBox grpLeyenda;
         private System.Windows.Forms.Label lblInfo;
-
-        // --- NUEVO BOTÓN ---
-        private System.Windows.Forms.Button btnBenchmark;
+        private System.Windows.Forms.Button btnBenchmark; // Botón Nuevo
 
         protected override void Dispose(bool disposing)
         {
@@ -49,7 +44,7 @@
             pnlGrafica.Name = "pnlGrafica";
             pnlGrafica.Padding = new Padding(11, 13, 11, 13);
             pnlGrafica.Size = new Size(896, 748);
-            pnlGrafica.TabIndex = 1;
+            pnlGrafica.TabIndex = 0;
             // 
             // tblLayout
             // 
@@ -72,7 +67,7 @@
             // 
             // plotLineal
             // 
-            plotLineal.DisplayScale = 1F;
+            plotLineal.DisplayScale = 1.25F;
             plotLineal.Dock = DockStyle.Fill;
             plotLineal.Location = new Point(3, 4);
             plotLineal.Margin = new Padding(3, 4, 3, 4);
@@ -82,7 +77,7 @@
             // 
             // plotBinaria
             // 
-            plotBinaria.DisplayScale = 1F;
+            plotBinaria.DisplayScale = 1.25F;
             plotBinaria.Dock = DockStyle.Fill;
             plotBinaria.Location = new Point(440, 4);
             plotBinaria.Margin = new Padding(3, 4, 3, 4);
@@ -92,7 +87,7 @@
             // 
             // plotInsertion
             // 
-            plotInsertion.DisplayScale = 1F;
+            plotInsertion.DisplayScale = 1.25F;
             plotInsertion.Dock = DockStyle.Fill;
             plotInsertion.Location = new Point(3, 365);
             plotInsertion.Margin = new Padding(3, 4, 3, 4);
@@ -102,7 +97,7 @@
             // 
             // plotQuick
             // 
-            plotQuick.DisplayScale = 1F;
+            plotQuick.DisplayScale = 1.25F;
             plotQuick.Dock = DockStyle.Fill;
             plotQuick.Location = new Point(440, 365);
             plotQuick.Margin = new Padding(3, 4, 3, 4);
@@ -120,7 +115,7 @@
             grpLeyenda.Name = "grpLeyenda";
             grpLeyenda.Padding = new Padding(3, 4, 3, 4);
             grpLeyenda.Size = new Size(229, 748);
-            grpLeyenda.TabIndex = 0;
+            grpLeyenda.TabIndex = 1;
             grpLeyenda.TabStop = false;
             grpLeyenda.Text = "Controles";
             // 
@@ -128,14 +123,13 @@
             // 
             btnBenchmark.BackColor = Color.SteelBlue;
             btnBenchmark.FlatStyle = FlatStyle.Flat;
-            btnBenchmark.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnBenchmark.ForeColor = Color.White;
             btnBenchmark.Location = new Point(14, 40);
             btnBenchmark.Margin = new Padding(3, 4, 3, 4);
             btnBenchmark.Name = "btnBenchmark";
             btnBenchmark.Size = new Size(201, 67);
-            btnBenchmark.TabIndex = 1;
-            btnBenchmark.Text = "Ejecutar Test Completo\n(Generar Curvas)";
+            btnBenchmark.TabIndex = 0;
+            btnBenchmark.Text = "Ejecutar Benchmark";
             btnBenchmark.UseVisualStyleBackColor = false;
             btnBenchmark.Click += BtnBenchmark_Click;
             // 
@@ -144,8 +138,8 @@
             lblInfo.Location = new Point(11, 133);
             lblInfo.Name = "lblInfo";
             lblInfo.Size = new Size(206, 533);
-            lblInfo.TabIndex = 0;
-            lblInfo.Text = "Pulsa 'Ejecutar Test' para generar una curva automática.\n\nEje X: Cantidad (N)\nEje Y: Pasos (Operaciones)";
+            lblInfo.TabIndex = 1;
+            lblInfo.Text = "Presiona 'Ejecutar Benchmark\r\n' para generar las curvas de rendimiento (Pasos vs Cantidad).";
             // 
             // FrmComparar
             // 
@@ -156,7 +150,7 @@
             Controls.Add(grpLeyenda);
             Margin = new Padding(3, 4, 3, 4);
             Name = "FrmComparar";
-            Text = "Comparación de Algoritmos";
+            Text = "Comparación de Algoritmos (Notación Big O)";
             pnlGrafica.ResumeLayout(false);
             tblLayout.ResumeLayout(false);
             grpLeyenda.ResumeLayout(false);
