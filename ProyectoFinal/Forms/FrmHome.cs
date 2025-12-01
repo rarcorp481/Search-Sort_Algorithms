@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProyectoFinal.Forms
@@ -15,6 +9,13 @@ namespace ProyectoFinal.Forms
         public FrmHome()
         {
             InitializeComponent();
+            ConfigurarEstilo();
+        }
+
+        private void ConfigurarEstilo()
+        {
+            // Aplicamos el color global definido en Program.cs
+            this.BackColor = DatosGlobales.ColorFondo;
         }
     }
 }

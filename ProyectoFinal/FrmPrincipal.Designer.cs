@@ -61,7 +61,7 @@
             panelSideBar.Dock = DockStyle.Left;
             panelSideBar.Location = new Point(0, 0);
             panelSideBar.Name = "panelSideBar";
-            panelSideBar.Size = new Size(303, 721);
+            panelSideBar.Size = new Size(303, 813);
             panelSideBar.TabIndex = 0;
             panelSideBar.Paint += panelSideBar_Paint;
             // 
@@ -75,7 +75,7 @@
             btnAjustes.ImageAlign = ContentAlignment.MiddleLeft;
             btnAjustes.ImageIndex = 1;
             btnAjustes.ImageList = FormIcons;
-            btnAjustes.Location = new Point(0, 581);
+            btnAjustes.Location = new Point(0, 673);
             btnAjustes.Name = "btnAjustes";
             btnAjustes.Padding = new Padding(12, 0, 0, 0);
             btnAjustes.Size = new Size(303, 70);
@@ -84,6 +84,7 @@
             btnAjustes.TextAlign = ContentAlignment.MiddleLeft;
             btnAjustes.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnAjustes.UseVisualStyleBackColor = true;
+            btnAjustes.Click += btnAjustes_Click;
             // 
             // FormIcons
             // 
@@ -108,7 +109,7 @@
             btnSalir.ImageAlign = ContentAlignment.MiddleLeft;
             btnSalir.ImageIndex = 2;
             btnSalir.ImageList = FormIcons;
-            btnSalir.Location = new Point(0, 651);
+            btnSalir.Location = new Point(0, 743);
             btnSalir.Name = "btnSalir";
             btnSalir.Padding = new Padding(12, 0, 0, 0);
             btnSalir.Size = new Size(303, 70);
@@ -231,13 +232,13 @@
             panelDock.Dock = DockStyle.Fill;
             panelDock.Location = new Point(303, 0);
             panelDock.Name = "panelDock";
-            panelDock.Size = new Size(1060, 721);
+            panelDock.Size = new Size(1060, 813);
             panelDock.TabIndex = 1;
             panelDock.Paint += panelDock_Paint;
             // 
             // panelTitle
             // 
-            panelTitle.BackColor = Color.Black;
+            panelTitle.BackColor = Color.Lavender;
             panelTitle.Dock = DockStyle.Top;
             panelTitle.Location = new Point(0, 0);
             panelTitle.Name = "panelTitle";
@@ -248,7 +249,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1363, 721);
+            ClientSize = new Size(1363, 813);
             Controls.Add(panelDock);
             Controls.Add(panelSideBar);
             Name = "FrmPrincipal";

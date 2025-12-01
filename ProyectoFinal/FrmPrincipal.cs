@@ -37,11 +37,17 @@ namespace ProyectoFinal
             OpenChildForm(new FrmBusqueda(), sender);
 
         }
-        
+
+        // Ajustes Button
+        private void btnAjustes_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new FrmAjustes(), sender);
+        }
+
         // Salir Button
         private void btnSalir_Click(object sender, EventArgs e)
         {
-           DialogResult respuesta = MessageBox.Show("Estás seguro que quieres salir del programa?" , "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult respuesta = MessageBox.Show("Estás seguro que quieres salir del programa?", "Salir", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (respuesta == DialogResult.Yes) Application.Exit();
             else this.Focus();
 
@@ -53,7 +59,7 @@ namespace ProyectoFinal
         // Abrir formularios hijos dentro del panelDock
         private void OpenChildForm(Form ChildForm, object btnSender)
         {
-            if (ActiveForm != null)
+            if (activeForm != null)
             {
                 activeForm.Close();
             }
