@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ProyectoFinal.Forms
@@ -29,95 +29,120 @@ namespace ProyectoFinal.Forms
                 {
                     int val = rnd.Next(0, 501);
                     numeros.Add(val);
-                    // Límite visual para no congelar la UI
                     if (i < 2000) lstNumeros.Items.Add(val);
                 }
                 lstNumeros.EndUpdate();
             }
-            else
-            {
-                MessageBox.Show("Ingrese una cantidad válida (sólo números enteros > 0).");
-            }
+            else MessageBox.Show("Ingrese cantidad válida.");
         }
 
-        private void BtnLineal_Click(object sender, EventArgs e)
+        private async void BtnLineal_Click(object sender, EventArgs e)
         {
-            if (numeros.Count == 0 || !int.TryParse(txtBuscarLineal.Text, out int objetivo)) return;
+            if (numeros.Count == 0 || !int.TryParse(txtBuscar.Text, out int objetivo)) return;
 
-            Stopwatch sw = Stopwatch.StartNew();
-            long memoriaInicial = GC.GetTotalMemory(true);
+            btnLineal.Enabled = false;
+            lblResLineal.Text = "Contando pasos...";
 
-            int indice = -1;
-            for (int i = 0; i < numeros.Count; i++)
+            var resultado = await Task.Run(() =>
             {
-                if (numeros[i] == objetivo)
+                long pasos = 0;
+                long memInicio = GC.GetAllocatedBytesForCurrentThread();
+                Stopwatch sw = Stopwatch.StartNew();
+
+                int idx = -1;
+                for (int i = 0; i < numeros.Count; i++)
                 {
-                    indice = i;
-                    break;
+                    pasos++; // CADA COMPARACIÓN ES UN PASO
+                    if (numeros[i] == objetivo)
+                    {
+                        idx = i;
+                        break;
+                    }
                 }
-            }
 
-            sw.Stop();
-            long memoriaFinal = GC.GetTotalMemory(true);
+                sw.Stop();
+                long memFin = GC.GetAllocatedBytesForCurrentThread();
 
-            // Medición en segundos
-            double segundos = sw.Elapsed.TotalSeconds;
+                return new { Indice = idx, Tiempo = sw.Elapsed.TotalSeconds, Memoria = memFin - memInicio, Pasos = pasos };
+            });
 
-            string resultado = indice != -1 ? "Encontrado" : "No Encontrado";
-            // Usamos F7 para mostrar suficientes decimales en segundos
-            lblResLineal.Text = $"Estado: {resultado}\nTiempo: {segundos:F7} s\nMemoria: {(memoriaFinal - memoriaInicial)} bytes";
+            string textoEstado = resultado.Indice != -1 ? "Encontrado" : "No Encontrado";
 
-            if (indice != -1 && indice < lstNumeros.Items.Count)
-                lstNumeros.SelectedIndex = indice;
+            // Mostramos PASOS en lugar de solo tiempo
+            lblResLineal.Text = $"Estado: {textoEstado}\nPasos: {resultado.Pasos:N0}\nMemoria: {resultado.Memoria:N0} bytes";
 
-            GuardarResultado("Lineal", numeros.Count, segundos);
+            if (resultado.Indice != -1 && resultado.Indice < lstNumeros.Items.Count)
+                lstNumeros.SelectedIndex = resultado.Indice;
+
+            Guardar("Lineal", numeros.Count, resultado.Tiempo, resultado.Pasos);
+            btnLineal.Enabled = true;
         }
 
-        private void BtnBinaria_Click(object sender, EventArgs e)
+        private async void BtnBinaria_Click(object sender, EventArgs e)
         {
-            if (numeros.Count == 0 || !int.TryParse(txtBuscarBinaria.Text, out int objetivo)) return;
+            if (numeros.Count == 0 || !int.TryParse(txtBuscar.Text, out int objetivo)) return;
 
-            List<int> copiaOrdenada = new List<int>(numeros);
-            copiaOrdenada.Sort();
+            btnBinaria.Enabled = false;
+            lblResBinaria.Text = "Contando pasos...";
 
-            Stopwatch sw = Stopwatch.StartNew();
-            long memoriaInicial = GC.GetTotalMemory(true);
-
-            int indice = copiaOrdenada.BinarySearch(objetivo);
-
-            sw.Stop();
-            long memoriaFinal = GC.GetTotalMemory(true);
-
-            // Medición en segundos
-            double segundos = sw.Elapsed.TotalSeconds;
-
-            string resultado = indice >= 0 ? "Encontrado" : "No Encontrado";
-            lblResBinaria.Text = $"Estado: {resultado}\nTiempo: {segundos:F7} s\nMemoria: {(memoriaFinal - memoriaInicial)} bytes";
-
-            if (indice >= 0)
+            var resultado = await Task.Run(() =>
             {
-                int visualIndex = numeros.IndexOf(objetivo);
-                if (visualIndex != -1 && visualIndex < lstNumeros.Items.Count)
-                    lstNumeros.SelectedIndex = visualIndex;
+                long pasos = 0;
+                long memInicio = GC.GetAllocatedBytesForCurrentThread();
+                Stopwatch sw = Stopwatch.StartNew();
+
+                List<int> copia = new List<int>(numeros);
+                copia.Sort(); // Ordenar no cuenta para la búsqueda binaria pura, solo el while
+
+                int izquierda = 0;
+                int derecha = copia.Count - 1;
+                int idx = -1;
+
+                while (izquierda <= derecha)
+                {
+                    pasos++; // CADA DIVISIÓN ES UN PASO
+                    int medio = izquierda + (derecha - izquierda) / 2;
+
+                    if (copia[medio] == objetivo)
+                    {
+                        idx = medio;
+                        break;
+                    }
+                    if (copia[medio] < objetivo)
+                        izquierda = medio + 1;
+                    else
+                        derecha = medio - 1;
+                }
+
+                sw.Stop();
+                long memFin = GC.GetAllocatedBytesForCurrentThread();
+
+                return new { Indice = idx, Tiempo = sw.Elapsed.TotalSeconds, Memoria = memFin - memInicio, Pasos = pasos };
+            });
+
+            string textoEstado = resultado.Indice >= 0 ? "Encontrado" : "No Encontrado";
+            lblResBinaria.Text = $"Estado: {textoEstado}\nPasos: {resultado.Pasos:N0}\nMemoria: {resultado.Memoria:N0} bytes";
+
+            if (resultado.Indice >= 0)
+            {
+                int visualIdx = numeros.IndexOf(objetivo);
+                if (visualIdx != -1 && visualIdx < lstNumeros.Items.Count) lstNumeros.SelectedIndex = visualIdx;
             }
 
-            GuardarResultado("Binaria", numeros.Count, segundos);
+            Guardar("Binaria", numeros.Count, resultado.Tiempo, resultado.Pasos);
+            btnBinaria.Enabled = true;
         }
 
-        private void GuardarResultado(string nombre, int cant, double tiempoSeg)
+        private void Guardar(string nombre, int n, double t, long p)
         {
             DatosGlobales.Resultados.Add(new ResultadoAlgoritmo
             {
                 Nombre = nombre,
-                CantidadElementos = cant,
-                TiempoSegundos = tiempoSeg, // Guardamos en segundos
+                CantidadElementos = n,
+                TiempoSegundos = t,
+                Pasos = p, // Guardamos los pasos reales
                 Tipo = "Busqueda"
             });
-        }
-
-        private void FrmBusqueda_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
