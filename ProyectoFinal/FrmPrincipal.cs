@@ -71,6 +71,7 @@ namespace ProyectoFinal
             this.panelDock.Tag = ChildForm;
             ChildForm.BringToFront();
             ChildForm.Show();
+            lblHeader.Text = ChildForm.Text;
         }
 
         // Elementos del FrmPrincipal

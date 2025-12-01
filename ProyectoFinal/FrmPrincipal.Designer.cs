@@ -42,10 +42,12 @@
             pictureBox1 = new PictureBox();
             panelDock = new Panel();
             panelTitle = new Panel();
+            lblHeader = new Label();
             panelSideBar.SuspendLayout();
             panelLogo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             panelDock.SuspendLayout();
+            panelTitle.SuspendLayout();
             SuspendLayout();
             // 
             // panelSideBar
@@ -232,24 +234,38 @@
             panelDock.Dock = DockStyle.Fill;
             panelDock.Location = new Point(303, 0);
             panelDock.Name = "panelDock";
-            panelDock.Size = new Size(1060, 813);
+            panelDock.Size = new Size(940, 813);
             panelDock.TabIndex = 1;
             panelDock.Paint += panelDock_Paint;
             // 
             // panelTitle
             // 
-            panelTitle.BackColor = Color.Lavender;
+            panelTitle.BackColor = Color.FromArgb(51, 51, 76);
+            panelTitle.Controls.Add(lblHeader);
             panelTitle.Dock = DockStyle.Top;
+            panelTitle.ForeColor = SystemColors.Control;
             panelTitle.Location = new Point(0, 0);
             panelTitle.Name = "panelTitle";
-            panelTitle.Size = new Size(1060, 95);
+            panelTitle.Size = new Size(940, 95);
             panelTitle.TabIndex = 0;
+            // 
+            // lblHeader
+            // 
+            lblHeader.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            lblHeader.Font = new Font("Segoe UI", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblHeader.ForeColor = SystemColors.Control;
+            lblHeader.Location = new Point(-8, 23);
+            lblHeader.Name = "lblHeader";
+            lblHeader.Size = new Size(920, 55);
+            lblHeader.TabIndex = 0;
+            lblHeader.Text = "Sort and Search Lab";
+            lblHeader.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // FrmPrincipal
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1363, 813);
+            ClientSize = new Size(1243, 813);
             Controls.Add(panelDock);
             Controls.Add(panelSideBar);
             Name = "FrmPrincipal";
@@ -259,6 +275,7 @@
             panelLogo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             panelDock.ResumeLayout(false);
+            panelTitle.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -276,5 +293,6 @@
         private Panel panelTitle;
         private Button btnHome;
         private PictureBox pictureBox1;
+        private Label lblHeader;
     }
 }
