@@ -15,54 +15,55 @@
 
         private void InitializeComponent()
         {
-            this.lblTitulo = new System.Windows.Forms.Label();
-            this.lblDescripcion = new System.Windows.Forms.Label();
-            this.pnlDecoracion = new System.Windows.Forms.Panel();
-            this.SuspendLayout();
-
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmHome));
+            lblTitulo = new Label();
+            lblDescripcion = new Label();
+            pnlDecoracion = new Panel();
+            SuspendLayout();
+            // 
             // lblTitulo
-            this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTitulo.Location = new System.Drawing.Point(40, 40);
-            this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(500, 47);
-            this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Bienvenido al Comparador";
-
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Segoe UI", 26F, FontStyle.Bold);
+            lblTitulo.ForeColor = Color.FromArgb(64, 64, 64);
+            lblTitulo.Location = new Point(46, 53);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(579, 60);
+            lblTitulo.TabIndex = 0;
+            lblTitulo.Text = "Bienvenido al Comparador";
+            // 
             // lblDescripcion
-            this.lblDescripcion.AutoSize = true;
-            this.lblDescripcion.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.lblDescripcion.Location = new System.Drawing.Point(45, 110);
-            this.lblDescripcion.Name = "lblDescripcion";
-            this.lblDescripcion.Size = new System.Drawing.Size(650, 150);
-            this.lblDescripcion.TabIndex = 1;
-            this.lblDescripcion.Text = "Esta aplicación ha sido diseñada para analizar el rendimiento algorítmico.\n\n" +
-                                     "Funcionalidades disponibles:\n" +
-                                     "• Generación de datos aleatorios (0 - 500).\n" +
-                                     "• Análisis de Búsqueda: Comparativa entre Lineal y Binaria.\n" +
-                                     "• Análisis de Ordenamiento: Comparativa entre Insertion y Quick Sort.\n" +
-                                     "• Gráficas de Rendimiento: Visualización de Time Complexity (Big O).\n\n" +
-                                     "Seleccione una opción del menú lateral para comenzar.";
-
-            // pnlDecoracion (Una línea decorativa simple)
-            this.pnlDecoracion.BackColor = System.Drawing.Color.SteelBlue;
-            this.pnlDecoracion.Location = new System.Drawing.Point(45, 95);
-            this.pnlDecoracion.Name = "pnlDecoracion";
-            this.pnlDecoracion.Size = new System.Drawing.Size(100, 5);
-            this.pnlDecoracion.TabIndex = 2;
-
+            // 
+            lblDescripcion.AutoSize = true;
+            lblDescripcion.Font = new Font("Segoe UI", 12F);
+            lblDescripcion.Location = new Point(51, 147);
+            lblDescripcion.Name = "lblDescripcion";
+            lblDescripcion.Size = new Size(649, 252);
+            lblDescripcion.TabIndex = 1;
+            lblDescripcion.Text = resources.GetString("lblDescripcion.Text");
+            // 
+            // pnlDecoracion
+            // 
+            pnlDecoracion.BackColor = Color.SteelBlue;
+            pnlDecoracion.Location = new Point(51, 127);
+            pnlDecoracion.Margin = new Padding(3, 4, 3, 4);
+            pnlDecoracion.Name = "pnlDecoracion";
+            pnlDecoracion.Size = new Size(114, 7);
+            pnlDecoracion.TabIndex = 2;
+            // 
             // FrmHome
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 500);
-            this.Controls.Add(this.pnlDecoracion);
-            this.Controls.Add(this.lblDescripcion);
-            this.Controls.Add(this.lblTitulo);
-            this.Name = "FrmHome";
-            this.Text = "Bienvenida";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(914, 667);
+            Controls.Add(pnlDecoracion);
+            Controls.Add(lblDescripcion);
+            Controls.Add(lblTitulo);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "FrmHome";
+            Text = "Bienvenida";
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }

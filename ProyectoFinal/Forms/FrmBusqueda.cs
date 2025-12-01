@@ -15,6 +15,13 @@ namespace ProyectoFinal.Forms
             InitializeComponent();
             this.BackColor = DatosGlobales.ColorFondo;
         }
+        private void FrmBusqueda_Load(object sender, EventArgs e)
+        {
+            txtCantidad.Text = "100";
+            lblResLineal.Text = "Resultados:\nEsperando...";
+            lblResBinaria.Text = "Resultados:\nEsperando...";
+            // Any other startup setup (avoid heavy sync work here)
+        }
 
         private void BtnGenerar_Click(object sender, EventArgs e)
         {
@@ -38,7 +45,7 @@ namespace ProyectoFinal.Forms
 
         private async void BtnLineal_Click(object sender, EventArgs e)
         {
-            if (numeros.Count == 0 || !int.TryParse(txtBuscar.Text, out int objetivo)) return;
+            if (numeros.Count == 0 || !int.TryParse(txtBuscarLineal.Text, out int objetivo)) return;
 
             btnLineal.Enabled = false;
             lblResLineal.Text = "Contando pasos...";
@@ -80,7 +87,7 @@ namespace ProyectoFinal.Forms
 
         private async void BtnBinaria_Click(object sender, EventArgs e)
         {
-            if (numeros.Count == 0 || !int.TryParse(txtBuscar.Text, out int objetivo)) return;
+            if (numeros.Count == 0 || !int.TryParse(txtBuscarBinaria.Text, out int objetivo)) return;
 
             btnBinaria.Enabled = false;
             lblResBinaria.Text = "Contando pasos...";

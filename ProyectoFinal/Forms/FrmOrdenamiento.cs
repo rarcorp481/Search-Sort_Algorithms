@@ -172,5 +172,14 @@ namespace ProyectoFinal.Forms
             for (int i = 0; i < datos.Count && i < 2000; i++) lst.Items.Add(datos[i]);
             lst.EndUpdate();
         }
+
+        private void txtCantidad_TextChanged(object sender, EventArgs e)
+        {
+            // Enable Generate only for valid positive integers
+            if (int.TryParse(txtCantidad.Text.Trim(), out int n) && n > 0)
+                btnGenerar.Enabled = true;
+            else
+                btnGenerar.Enabled = false;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace ProyectoFinal
         public string Nombre { get; set; }
         public int CantidadElementos { get; set; }
         public double TiempoSegundos { get; set; }
-        public long Pasos { get; set; } // <--- ESTA ES LA CLAVE DE TU GRÁFICA
+        public long Pasos { get; set; } 
         public string Tipo { get; set; }
     }
 

@@ -3,16 +3,20 @@
     partial class FrmComparar
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.GroupBox grpControles;
-        private System.Windows.Forms.Panel pnlGrafica; // Contenedor para la gráfica
-        private System.Windows.Forms.RadioButton rbTodos;
-        private System.Windows.Forms.RadioButton rbOrdenamiento;
-        private System.Windows.Forms.RadioButton rbBusqueda;
-        private System.Windows.Forms.Label lblPregunta;
-        private System.Windows.Forms.Label lblBigO;
+        private System.Windows.Forms.Panel pnlGrafica;
+        private System.Windows.Forms.TableLayoutPanel tblLayout;
 
-        // Control de ScottPlot
-        private ScottPlot.WinForms.FormsPlot formsPlot1;
+        // Gráficos
+        private ScottPlot.WinForms.FormsPlot plotLineal;
+        private ScottPlot.WinForms.FormsPlot plotBinaria;
+        private ScottPlot.WinForms.FormsPlot plotInsertion;
+        private ScottPlot.WinForms.FormsPlot plotQuick;
+
+        private System.Windows.Forms.GroupBox grpLeyenda;
+        private System.Windows.Forms.Label lblInfo;
+
+        // --- NUEVO BOTÓN ---
+        private System.Windows.Forms.Button btnBenchmark;
 
         protected override void Dispose(bool disposing)
         {
@@ -22,111 +26,141 @@
 
         private void InitializeComponent()
         {
-            this.grpControles = new System.Windows.Forms.GroupBox();
-            this.rbTodos = new System.Windows.Forms.RadioButton();
-            this.rbOrdenamiento = new System.Windows.Forms.RadioButton();
-            this.rbBusqueda = new System.Windows.Forms.RadioButton();
-            this.lblPregunta = new System.Windows.Forms.Label();
-            this.lblBigO = new System.Windows.Forms.Label();
-            this.pnlGrafica = new System.Windows.Forms.Panel();
-            this.formsPlot1 = new ScottPlot.WinForms.FormsPlot();
-
-            this.grpControles.SuspendLayout();
-            this.pnlGrafica.SuspendLayout();
-            this.SuspendLayout();
-
+            pnlGrafica = new Panel();
+            tblLayout = new TableLayoutPanel();
+            plotLineal = new ScottPlot.WinForms.FormsPlot();
+            plotBinaria = new ScottPlot.WinForms.FormsPlot();
+            plotInsertion = new ScottPlot.WinForms.FormsPlot();
+            plotQuick = new ScottPlot.WinForms.FormsPlot();
+            grpLeyenda = new GroupBox();
+            btnBenchmark = new Button();
+            lblInfo = new Label();
+            pnlGrafica.SuspendLayout();
+            tblLayout.SuspendLayout();
+            grpLeyenda.SuspendLayout();
+            SuspendLayout();
             // 
-            // grpControles
+            // pnlGrafica
             // 
-            this.grpControles.Controls.Add(this.lblBigO);
-            this.grpControles.Controls.Add(this.rbTodos);
-            this.grpControles.Controls.Add(this.rbOrdenamiento);
-            this.grpControles.Controls.Add(this.rbBusqueda);
-            this.grpControles.Controls.Add(this.lblPregunta);
-            this.grpControles.Dock = System.Windows.Forms.DockStyle.Left;
-            this.grpControles.Location = new System.Drawing.Point(0, 0);
-            this.grpControles.Name = "grpControles";
-            this.grpControles.Size = new System.Drawing.Size(200, 530);
-            this.grpControles.TabIndex = 0;
-            this.grpControles.TabStop = false;
-            this.grpControles.Text = "Controles";
-
-            // lblPregunta
-            this.lblPregunta.AutoSize = true;
-            this.lblPregunta.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPregunta.Location = new System.Drawing.Point(10, 30);
-            this.lblPregunta.Name = "lblPregunta";
-            this.lblPregunta.Size = new System.Drawing.Size(107, 15);
-            this.lblPregunta.TabIndex = 0;
-            this.lblPregunta.Text = "¿Qué comparar?";
-
-            // RadioButtons
-            this.rbBusqueda.AutoSize = true;
-            this.rbBusqueda.Location = new System.Drawing.Point(15, 60);
-            this.rbBusqueda.Name = "rbBusqueda";
-            this.rbBusqueda.Size = new System.Drawing.Size(76, 19);
-            this.rbBusqueda.TabIndex = 1;
-            this.rbBusqueda.Text = "Búsqueda";
-            this.rbBusqueda.CheckedChanged += new System.EventHandler(this.Filtros_CheckedChanged);
-
-            this.rbOrdenamiento.AutoSize = true;
-            this.rbOrdenamiento.Location = new System.Drawing.Point(15, 90);
-            this.rbOrdenamiento.Name = "rbOrdenamiento";
-            this.rbOrdenamiento.Size = new System.Drawing.Size(103, 19);
-            this.rbOrdenamiento.TabIndex = 2;
-            this.rbOrdenamiento.Text = "Ordenamiento";
-            this.rbOrdenamiento.CheckedChanged += new System.EventHandler(this.Filtros_CheckedChanged);
-
-            this.rbTodos.AutoSize = true;
-            this.rbTodos.Checked = true;
-            this.rbTodos.Location = new System.Drawing.Point(15, 120);
-            this.rbTodos.Name = "rbTodos";
-            this.rbTodos.Size = new System.Drawing.Size(56, 19);
-            this.rbTodos.TabIndex = 3;
-            this.rbTodos.TabStop = true;
-            this.rbTodos.Text = "Todos";
-            this.rbTodos.CheckedChanged += new System.EventHandler(this.Filtros_CheckedChanged);
-
-            // lblBigO
-            this.lblBigO.Location = new System.Drawing.Point(12, 160);
-            this.lblBigO.Name = "lblBigO";
-            this.lblBigO.Size = new System.Drawing.Size(182, 361);
-            this.lblBigO.TabIndex = 4;
-            this.lblBigO.Text = "Seleccione una opción para ver el análisis.";
-
+            pnlGrafica.Controls.Add(tblLayout);
+            pnlGrafica.Dock = DockStyle.Fill;
+            pnlGrafica.Location = new Point(229, 0);
+            pnlGrafica.Margin = new Padding(3, 4, 3, 4);
+            pnlGrafica.Name = "pnlGrafica";
+            pnlGrafica.Padding = new Padding(11, 13, 11, 13);
+            pnlGrafica.Size = new Size(896, 748);
+            pnlGrafica.TabIndex = 1;
             // 
-            // pnlGrafica (Contenedor derecho)
+            // tblLayout
             // 
-            this.pnlGrafica.Controls.Add(this.formsPlot1);
-            this.pnlGrafica.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlGrafica.Location = new System.Drawing.Point(200, 0);
-            this.pnlGrafica.Name = "pnlGrafica";
-            this.pnlGrafica.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlGrafica.Size = new System.Drawing.Size(600, 530);
-            this.pnlGrafica.TabIndex = 1;
-
+            tblLayout.ColumnCount = 2;
+            tblLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tblLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tblLayout.Controls.Add(plotLineal, 0, 0);
+            tblLayout.Controls.Add(plotBinaria, 1, 0);
+            tblLayout.Controls.Add(plotInsertion, 0, 1);
+            tblLayout.Controls.Add(plotQuick, 1, 1);
+            tblLayout.Dock = DockStyle.Fill;
+            tblLayout.Location = new Point(11, 13);
+            tblLayout.Margin = new Padding(3, 4, 3, 4);
+            tblLayout.Name = "tblLayout";
+            tblLayout.RowCount = 2;
+            tblLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tblLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tblLayout.Size = new Size(874, 722);
+            tblLayout.TabIndex = 0;
             // 
-            // formsPlot1 (El control de ScottPlot)
+            // plotLineal
             // 
-            this.formsPlot1.DisplayScale = 1F;
-            this.formsPlot1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.formsPlot1.Location = new System.Drawing.Point(10, 10);
-            this.formsPlot1.Name = "formsPlot1";
-            this.formsPlot1.Size = new System.Drawing.Size(580, 510);
-            this.formsPlot1.TabIndex = 0;
-
+            plotLineal.DisplayScale = 1F;
+            plotLineal.Dock = DockStyle.Fill;
+            plotLineal.Location = new Point(3, 4);
+            plotLineal.Margin = new Padding(3, 4, 3, 4);
+            plotLineal.Name = "plotLineal";
+            plotLineal.Size = new Size(431, 353);
+            plotLineal.TabIndex = 0;
+            // 
+            // plotBinaria
+            // 
+            plotBinaria.DisplayScale = 1F;
+            plotBinaria.Dock = DockStyle.Fill;
+            plotBinaria.Location = new Point(440, 4);
+            plotBinaria.Margin = new Padding(3, 4, 3, 4);
+            plotBinaria.Name = "plotBinaria";
+            plotBinaria.Size = new Size(431, 353);
+            plotBinaria.TabIndex = 1;
+            // 
+            // plotInsertion
+            // 
+            plotInsertion.DisplayScale = 1F;
+            plotInsertion.Dock = DockStyle.Fill;
+            plotInsertion.Location = new Point(3, 365);
+            plotInsertion.Margin = new Padding(3, 4, 3, 4);
+            plotInsertion.Name = "plotInsertion";
+            plotInsertion.Size = new Size(431, 353);
+            plotInsertion.TabIndex = 2;
+            // 
+            // plotQuick
+            // 
+            plotQuick.DisplayScale = 1F;
+            plotQuick.Dock = DockStyle.Fill;
+            plotQuick.Location = new Point(440, 365);
+            plotQuick.Margin = new Padding(3, 4, 3, 4);
+            plotQuick.Name = "plotQuick";
+            plotQuick.Size = new Size(431, 353);
+            plotQuick.TabIndex = 3;
+            // 
+            // grpLeyenda
+            // 
+            grpLeyenda.Controls.Add(btnBenchmark);
+            grpLeyenda.Controls.Add(lblInfo);
+            grpLeyenda.Dock = DockStyle.Left;
+            grpLeyenda.Location = new Point(0, 0);
+            grpLeyenda.Margin = new Padding(3, 4, 3, 4);
+            grpLeyenda.Name = "grpLeyenda";
+            grpLeyenda.Padding = new Padding(3, 4, 3, 4);
+            grpLeyenda.Size = new Size(229, 748);
+            grpLeyenda.TabIndex = 0;
+            grpLeyenda.TabStop = false;
+            grpLeyenda.Text = "Controles";
+            // 
+            // btnBenchmark
+            // 
+            btnBenchmark.BackColor = Color.SteelBlue;
+            btnBenchmark.FlatStyle = FlatStyle.Flat;
+            btnBenchmark.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnBenchmark.ForeColor = Color.White;
+            btnBenchmark.Location = new Point(14, 40);
+            btnBenchmark.Margin = new Padding(3, 4, 3, 4);
+            btnBenchmark.Name = "btnBenchmark";
+            btnBenchmark.Size = new Size(201, 67);
+            btnBenchmark.TabIndex = 1;
+            btnBenchmark.Text = "Ejecutar Test Completo\n(Generar Curvas)";
+            btnBenchmark.UseVisualStyleBackColor = false;
+            btnBenchmark.Click += BtnBenchmark_Click;
+            // 
+            // lblInfo
+            // 
+            lblInfo.Location = new Point(11, 133);
+            lblInfo.Name = "lblInfo";
+            lblInfo.Size = new Size(206, 533);
+            lblInfo.TabIndex = 0;
+            lblInfo.Text = "Pulsa 'Ejecutar Test' para generar una curva automática.\n\nEje X: Cantidad (N)\nEje Y: Pasos (Operaciones)";
+            // 
             // FrmComparar
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 530);
-            this.Controls.Add(this.pnlGrafica);
-            this.Controls.Add(this.grpControles);
-            this.Name = "FrmComparar";
-            this.Text = "Comparación de Resultados";
-            this.grpControles.ResumeLayout(false);
-            this.grpControles.PerformLayout();
-            this.pnlGrafica.ResumeLayout(false);
-            this.ResumeLayout(false);
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1125, 748);
+            Controls.Add(pnlGrafica);
+            Controls.Add(grpLeyenda);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "FrmComparar";
+            Text = "Comparación de Algoritmos";
+            pnlGrafica.ResumeLayout(false);
+            tblLayout.ResumeLayout(false);
+            grpLeyenda.ResumeLayout(false);
+            ResumeLayout(false);
         }
     }
 }

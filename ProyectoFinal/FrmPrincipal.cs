@@ -7,7 +7,7 @@ namespace ProyectoFinal
 {
     public partial class FrmPrincipal : Form
     {
-        // 1. Instancias persistentes para guardar el progreso
+        // Instancias para guardar el progreso
         private FrmHome frmHome;
         private FrmBusqueda frmBusqueda;
         private FrmOrdenamiento frmOrdenamiento;
@@ -21,14 +21,13 @@ namespace ProyectoFinal
             InitializeComponent();
             ConfigurarEstilo();
 
-            // 2. Inicializamos los formularios UNA SOLA VEZ
-            // Al crearlos aquí, se mantienen vivos en memoria RAM con sus datos
+            // Abrir formularios una vez y mantenerlos en memoria
             frmHome = new FrmHome();
             frmBusqueda = new FrmBusqueda();
             frmOrdenamiento = new FrmOrdenamiento();
             frmComparar = new FrmComparar();
 
-            // 3. Abrimos el Home automáticamente al iniciar
+            // Abrir Home al iniciar
             AbrirFormulario(frmHome, btnHome);
         }
 
@@ -38,13 +37,12 @@ namespace ProyectoFinal
             panelDock.BackColor = System.Drawing.ColorTranslator.FromHtml("#E2E2EA");
         }
 
-        // --- MÉTODO CORREGIDO: Abrir sin borrar datos ---
+        // Método para abrir formularios dentro del panelDock
         private void AbrirFormulario(Form childForm, object btnSender)
         {
-            // Si intentamos abrir el mismo que ya vemos, no hacemos nada
             if (activeForm == childForm) return;
 
-            // En lugar de cerrar (.Close), solo ocultamos (.Hide) el anterior
+            // Se oculta el anterior y se muestra el nuevo
             if (activeForm != null)
             {
                 activeForm.Hide();
@@ -62,7 +60,7 @@ namespace ProyectoFinal
                 this.panelDock.Tag = childForm;
             }
 
-            // Mostramos el formulario (que conserva sus datos)
+            // Mostrar formulario con los datos actuales
             childForm.BringToFront();
             childForm.Show();
             lblHeader.Text = childForm.Text;

@@ -1,4 +1,5 @@
-﻿namespace ProyectoFinal.Forms
+﻿
+namespace ProyectoFinal.Forms
 {
     partial class FrmBusqueda
     {
@@ -217,6 +218,8 @@
             grpBinaria.PerformLayout();
             ResumeLayout(false);
         }
+
+
 
         private Label lblBuscarBinaria;
         private TextBox txtBuscarBinaria;

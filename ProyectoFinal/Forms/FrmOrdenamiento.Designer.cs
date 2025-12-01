@@ -1,4 +1,5 @@
-﻿namespace ProyectoFinal.Forms
+﻿
+namespace ProyectoFinal.Forms
 {
     partial class FrmOrdenamiento
     {
@@ -222,5 +223,7 @@
             grpQuick.PerformLayout();
             ResumeLayout(false);
         }
+
+
     }
 }

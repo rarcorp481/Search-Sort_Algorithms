@@ -137,7 +137,7 @@
             btnComparar.Padding = new Padding(12, 0, 0, 0);
             btnComparar.Size = new Size(303, 70);
             btnComparar.TabIndex = 3;
-            btnComparar.Text = "  Comparar resultados";
+            btnComparar.Text = "Comparar Algoritmos";
             btnComparar.TextAlign = ContentAlignment.MiddleLeft;
             btnComparar.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnComparar.UseVisualStyleBackColor = true;
